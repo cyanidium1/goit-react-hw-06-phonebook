@@ -1,31 +1,24 @@
-import { useEffect, useState } from 'react';
 import Form from './Form/Form';
 import Contacts from './Contacts/Contacts';
 import Input from './Input/Input';
 import Kek from './SeniorCodingExamples/SeniorCodingExamples';
-import { load } from '../components/utils/saveandload';
 import AddRandom from './AddRandom/AddRandom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+  addcontact,
+  deletecontact,
+  setStatusFilter,
+} from './redux/phonebook/actions';
 
 export const App = () => {
-  //states
-  const [contacts, updContacts] = useState(() => load('contacts') ?? []);
-  const [search, searcher] = useState('');
+  const dispatch = useDispatch();
 
-  //updates and storage
+  const contacts = useSelector(state => state.contacts);
+  const search = useSelector(state => state.filters);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-    } catch (e) {
-      console.log('error message:', e);
-    }
-  }, [contacts]);
-
-  // functions
   const deleteItem = id => {
-    updContacts(prevState => {
-      return prevState.filter(el => el.id !== id);
-    });
+    dispatch(deletecontact(id));
   };
 
   const addItem = (name, tel) => {
@@ -37,25 +30,18 @@ export const App = () => {
       return;
     }
 
-    updContacts(prevState => {
-      const newSt = [
-        ...prevState,
-        {
-          name: name,
-          tel: tel,
-          id: name + tel,
-        },
-      ];
-      return newSt;
-    });
+    dispatch(addcontact(name, tel));
   };
 
   const searchItem = input => {
-    searcher(input);
+    dispatch(setStatusFilter(input));
   };
+
   const filteredcontacts = () => {
     return contacts.filter(el =>
-      el.name.toLowerCase().includes(search.toLowerCase())
+      search.status === undefined
+        ? el
+        : el.name.toLowerCase().includes(search.status.toLowerCase())
     );
   };
   return (
