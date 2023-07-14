@@ -1,7 +1,14 @@
+import { useDispatch } from 'react-redux';
 import css from './Input.module.css';
 import PropTypes from 'prop-types';
+import { setStatusFilter } from 'components/redux/phonebook/actions';
 
-const Input = ({ searchItem }) => {
+const Input = () => {
+  const dispatch = useDispatch();
+  const searchItem = input => {
+    dispatch(setStatusFilter(input));
+  };
+
   return (
     <>
       <h2 className={css.head}>Phone book</h2>

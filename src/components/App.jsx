@@ -5,26 +5,20 @@ import Kek from './SeniorCodingExamples/SeniorCodingExamples';
 import AddRandom from './AddRandom/AddRandom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-  addcontact,
-  deletecontact,
-  setStatusFilter,
-} from './redux/phonebook/actions';
+import { addcontact, deletecontact } from './redux/phonebook/actions';
 //comment
 export const App = () => {
   const dispatch = useDispatch();
   useSelector(state => console.log(state.contacts.filter));
+
   const contacts = useSelector(state => state.contacts.contacts);
-  const search = useSelector(state => state.contacts.filters);
 
-  const deleteItem = id => {
-    dispatch(deletecontact(id));
-  };
-
+  //need it here cos used in 2 components
   const addItem = (name, tel) => {
     const isExist = contacts.find(
       e => e.name.toLocaleLowerCase() === name.toLocaleLowerCase()
     );
+
     if (isExist) {
       alert('Already exists');
       return;
@@ -33,17 +27,6 @@ export const App = () => {
     dispatch(addcontact(name, tel));
   };
 
-  const searchItem = input => {
-    dispatch(setStatusFilter(input));
-  };
-
-  const filteredcontacts = () => {
-    return contacts.filter(el =>
-      search === undefined
-        ? el
-        : el.name.toLowerCase().includes(search.status.toLowerCase())
-    );
-  };
   return (
     <div
       style={{
@@ -53,8 +36,8 @@ export const App = () => {
         justifyContent: 'center',
       }}
     >
-      <Input searchItem={searchItem} />
-      <Contacts contacts={filteredcontacts()} deleteItem={deleteItem} />
+      <Input />
+      <Contacts />
       <Form addItem={addItem} />
       <Kek />
       <AddRandom addItem={addItem} />
