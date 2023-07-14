@@ -13,9 +13,9 @@ import {
 //comment
 export const App = () => {
   const dispatch = useDispatch();
-
-  const contacts = useSelector(state => state.contacts);
-  const search = useSelector(state => state.filters);
+  useSelector(state => console.log(state.contacts.filter));
+  const contacts = useSelector(state => state.contacts.contacts);
+  const search = useSelector(state => state.contacts.filters);
 
   const deleteItem = id => {
     dispatch(deletecontact(id));
@@ -39,7 +39,7 @@ export const App = () => {
 
   const filteredcontacts = () => {
     return contacts.filter(el =>
-      search.status === undefined
+      search === undefined
         ? el
         : el.name.toLowerCase().includes(search.status.toLowerCase())
     );
